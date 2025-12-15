@@ -10,6 +10,7 @@ import SubmitGameModal from './components/SubmitGameModal';
 import Button from './components/Button';
 import ChatWidget from './components/ChatWidget';
 import MerchCard from './components/MerchCard';
+import FeaturedGame from './components/FeaturedGame';
 
 const LOGO_URL = "https://image.pollinations.ai/prompt/minimalist%20logo%20symbol%20two%20bold%20orange%20X%20shapes%20flanking%20a%20solid%20black%20circle%20XOX%20geometric%20vector%20art%20white%20background?width=128&height=128&nologo=true";
 
@@ -231,9 +232,13 @@ const App: React.FC = () => {
         {/* HOME VIEW */}
         {view === 'home' && !loadingGames && (
           <div className="space-y-12">
+            
+            {/* Featured Game Hero Section */}
+            {games.length > 0 && <FeaturedGame game={games[0]} />}
+
             {/* Trending Games Component - Showing 15 items for wider grid */}
             <TrendingGames 
-              games={games.slice(0, 15)} 
+              games={games.slice(1, 16)} 
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
               onStudioClick={handleStudioClick}
@@ -442,8 +447,15 @@ const App: React.FC = () => {
                      ))}
                    </div>
                  ) : (
-                   <div className="text-center py-20 text-slate-500">
-                     No games found matching your criteria.
+                   <div className="text-center py-20 border border-dashed border-slate-800 rounded-3xl bg-slate-900/30">
+                     <Gamepad2 className="w-16 h-16 text-slate-700 mx-auto mb-4" />
+                     <h3 className="text-xl font-bold text-white mb-2">No Games Found</h3>
+                     <p className="text-slate-400 mb-6">Try adjusting your filters or search for something else.</p>
+                     <Button onClick={() => {
+                       setSearchQuery('');
+                       setSelectedGenre('All');
+                       setSelectedPlatform('All');
+                     }}>Clear Filters</Button>
                    </div>
                  )}
                </>

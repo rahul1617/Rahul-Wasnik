@@ -9,6 +9,20 @@ const ai = new GoogleGenAI({ apiKey });
 const REAL_GAMES_DATA: Game[] = [
     // --- TOP TRENDING / POPULAR ---
     {
+        id: 'fortnite',
+        title: 'Fortnite',
+        studio: 'Epic Games',
+        genre: 'Battle Royale',
+        platform: ['PC', 'Console', 'Mobile'],
+        description: 'Drop into a vast, destructible world where no two games are ever the same. Build huge forts, find loot and squad up with friends.',
+        rating: 4.8,
+        officialLink: 'https://www.fortnite.com',
+        isNewRelease: false,
+        imageUrl: 'https://image.pollinations.ai/prompt/fortnite%20battle%20royale%20action%20gameplay%20vibrant%20colors%20building?width=640&height=360&nologo=true&seed=fortnite_main',
+        trailerVideoId: 'WJW-VvmRKsE',
+        tags: ['Shooter', 'Building', 'Multiplayer', 'Event', 'Cross-Platform']
+    },
+    {
         id: 'gta-v',
         title: 'Grand Theft Auto V',
         studio: 'Rockstar Games',
@@ -93,6 +107,48 @@ const REAL_GAMES_DATA: Game[] = [
         tags: ['Shooter', 'Competitive', 'Tactical', 'Multiplayer', 'Action']
     },
     {
+        id: 'warframe',
+        title: 'Warframe',
+        studio: 'Digital Extremes',
+        genre: 'Action RPG',
+        platform: ['PC', 'Console'],
+        description: 'Awaken as an unstoppable warrior and battle alongside your friends in this story-driven free-to-play online action game.',
+        rating: 4.7,
+        officialLink: 'https://www.warframe.com',
+        isNewRelease: false,
+        steamId: '230410',
+        trailerVideoId: 'Qk-c23tY4nI',
+        tags: ['Sci-Fi', 'Co-op', 'Looter Shooter', 'Ninja', 'Space']
+    },
+    {
+        id: 'destiny-2',
+        title: 'Destiny 2',
+        studio: 'Bungie',
+        genre: 'MMO FPS',
+        platform: ['PC', 'Console'],
+        description: 'Dive into the world of Destiny 2 to explore the mysteries of the solar system and experience responsive first-person shooter combat.',
+        rating: 4.6,
+        officialLink: 'https://www.bungie.net/7',
+        isNewRelease: false,
+        steamId: '1085660',
+        trailerVideoId: 'D8Hq1b7kZqM',
+        tags: ['Sci-Fi', 'Looter Shooter', 'Multiplayer', 'Story', 'Space']
+    },
+    {
+        id: 'path-of-exile',
+        title: 'Path of Exile',
+        studio: 'Grinding Gear Games',
+        genre: 'Action RPG',
+        platform: ['PC', 'Console'],
+        description: 'You are an Exile, struggling to survive on the dark continent of Wraeclast, as you fight to earn power that will allow you to exact your revenge.',
+        rating: 4.8,
+        officialLink: 'https://www.pathofexile.com',
+        isNewRelease: false,
+        steamId: '238960',
+        trailerVideoId: 'YI2R38iO9y4',
+        tags: ['Hack and Slash', 'Dungeon Crawler', 'Dark Fantasy', 'Loot', 'Hardcore']
+    },
+    {
         id: 'genshin-impact',
         title: 'Genshin Impact',
         studio: 'HoYoverse',
@@ -163,6 +219,20 @@ const REAL_GAMES_DATA: Game[] = [
         tags: ['Racing', 'Football', 'Multiplayer', 'Competitive', 'Team']
     },
     {
+        id: 'fall-guys',
+        title: 'Fall Guys',
+        studio: 'Mediatonic',
+        genre: 'Platformer',
+        platform: ['PC', 'Console'],
+        description: 'Fall Guys is a free, cross-platform, massively multiplayer, party royale game where you and your fellow contestants compete through escalating rounds of absurd obstacle course chaos.',
+        rating: 4.4,
+        officialLink: 'https://www.fallguys.com',
+        isNewRelease: false,
+        imageUrl: 'https://image.pollinations.ai/prompt/fall%20guys%20colorful%20obstacle%20course%20beans%20running?width=640&height=360&nologo=true&seed=fall_guys',
+        trailerVideoId: 'z6UrdUAZ7wM',
+        tags: ['Battle Royale', 'Casual', 'Multiplayer', 'Funny', 'Family']
+    },
+    {
         id: 'overwatch-2',
         title: 'Overwatch 2',
         studio: 'Blizzard',
@@ -217,6 +287,34 @@ const REAL_GAMES_DATA: Game[] = [
         trailerVideoId: '2pY8lO9y0_4',
         tags: ['Shooter', 'Destruction', 'Team', 'Action', 'Parkour']
     },
+    {
+        id: 'marvel-snap',
+        title: 'Marvel Snap',
+        studio: 'Second Dinner',
+        genre: 'Card Game',
+        platform: ['PC', 'Mobile'],
+        description: 'Unleash the entire Marvel Multiverse in this fast-paced, adrenaline-pumping strategic card battler.',
+        rating: 4.7,
+        officialLink: 'https://www.marvelsnap.com',
+        isNewRelease: true,
+        steamId: '1997040',
+        trailerVideoId: 'W6H1v0VqfT0',
+        tags: ['Strategy', 'Card Battler', 'Marvel', 'Casual', 'Competitive']
+    },
+    {
+        id: 'team-fortress-2',
+        title: 'Team Fortress 2',
+        studio: 'Valve',
+        genre: 'Hero FPS',
+        platform: ['PC'],
+        description: 'Nine distinct classes provide a broad range of tactical abilities and personalities. Constantly updated with new game modes, maps, equipment and more.',
+        rating: 4.8,
+        officialLink: 'https://www.teamfortress.com',
+        isNewRelease: false,
+        steamId: '440',
+        trailerVideoId: 'h_c3iQImXZg',
+        tags: ['Shooter', 'Class-Based', 'Funny', 'Multiplayer', 'Classic']
+    }
 ];
 
 export const fetchFeaturedGames = async (): Promise<Game[]> => {
@@ -397,7 +495,6 @@ export const fetchTopGamers = async (): Promise<GamerProfile[]> => {
             imageUrl: 'https://image.pollinations.ai/prompt/portrait%20of%20Faker%20T1%20esports%20gamer%20glasses%20serious%20expression%20korean%20jersey?width=150&height=150&nologo=true&seed=faker',
             socials: { twitch: 'https://www.twitch.tv/faker', instagram: 'https://www.instagram.com/faker' }
         },
-        // ... (rest of gamers list, unchanged)
         // --- Indian Icons ---
         {
             id: 'mortal',
