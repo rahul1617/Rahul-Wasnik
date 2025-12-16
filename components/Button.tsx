@@ -14,7 +14,8 @@ const Button: React.FC<ButtonProps> = ({
   className = '', 
   ...props 
 }) => {
-  const baseStyles = "relative inline-flex items-center justify-center font-bold tracking-wide transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden rounded-full font-display";
+  // Added active:scale-95 for click feedback and hover:-translate-y-0.5 for lift
+  const baseStyles = "relative inline-flex items-center justify-center font-bold tracking-wide transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden rounded-full font-display active:scale-95 hover:-translate-y-0.5 active:translate-y-0";
   
   const variants = {
     // Sky Blue Primary
@@ -25,8 +26,8 @@ const Button: React.FC<ButtonProps> = ({
     outline: "bg-transparent text-white border border-white/20 hover:border-[#38BDF8] hover:text-[#38BDF8] hover:bg-[#38BDF8]/5",
     // Ghost
     ghost: "text-slate-400 hover:text-white hover:bg-white/5",
-    // Glass with Neon Glow
-    glass: "bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-[#38BDF8]/10 hover:border-[#38BDF8]/60 hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] hover:text-white"
+    // Glass with Neon Glow - Added hover:scale-105 for premium zoom effect
+    glass: "bg-white/5 backdrop-blur-md border border-white/10 text-white hover:bg-[#38BDF8]/10 hover:border-[#38BDF8]/60 hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] hover:text-white hover:scale-105"
   };
 
   const sizes = {

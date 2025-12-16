@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Game } from '../types';
-import { Star, Share2, Check, Heart, Play, Code2, Building2 } from 'lucide-react';
+import { Star, Share2, Check, Heart, Play, Code2, Building2, Trophy } from 'lucide-react';
 import TrailerModal from './TrailerModal';
 
 interface GameCardProps {
@@ -48,7 +48,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
   return (
     <>
       <div 
-        className="group relative flex flex-col h-full bg-[#121212] rounded-[2rem] overflow-hidden hover:shadow-[0_0_40px_rgba(56,189,248,0.1)] transition-all duration-500 cursor-pointer border border-white/5 hover:border-[#38BDF8]/30 hover:-translate-y-1"
+        className="group relative flex flex-col h-full bg-[#121212] rounded-[2rem] overflow-hidden hover:shadow-[0_0_40px_rgba(56,189,248,0.15)] transition-all duration-500 cursor-pointer border border-white/5 hover:border-[#38BDF8]/40 hover:-translate-y-2 transform perspective-1000"
         onClick={() => game.officialLink && window.open(game.officialLink, '_blank')}
       >
         {/* Image Container */}
@@ -73,10 +73,27 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
           
           <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-60" />
           
-          <div className="absolute top-4 right-4 flex gap-2 translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 z-30">
+          {/* Micro-interaction: Sheen Effect */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out z-20 pointer-events-none" />
+          
+          {/* Achievement Tooltip */}
+          <div className="absolute top-4 left-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 delay-100">
+             <div className="group/tooltip relative">
+                <div className="p-2.5 bg-black/60 backdrop-blur-md text-[#FFD700] rounded-full border border-white/10 shadow-lg hover:bg-black/80 transition-colors">
+                    <Trophy className="w-4 h-4" />
+                </div>
+                <div className="absolute left-0 top-full mt-2 px-3 py-1.5 bg-black/90 border border-white/10 rounded-xl text-[10px] font-bold text-white whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-all pointer-events-none shadow-xl transform origin-top-left scale-95 group-hover/tooltip:scale-100 z-50">
+                    <div className="flex items-center gap-2">
+                         <span className="text-[#FFD700]">Achievements unlocked</span>
+                    </div>
+                </div>
+             </div>
+          </div>
+
+          <div className="absolute top-4 right-4 flex gap-2 translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 z-30 delay-75">
              <button
               onClick={handleShare}
-              className="p-2.5 bg-black/60 backdrop-blur-md text-white rounded-full hover:bg-[#38BDF8] hover:text-black transition-colors border border-white/10"
+              className="p-2.5 bg-black/60 backdrop-blur-md text-white rounded-full hover:bg-[#38BDF8] hover:text-black transition-all hover:scale-110 active:scale-95 border border-white/10"
             >
               {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
             </button>
@@ -86,7 +103,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
                 e.stopPropagation();
                 onToggleFavorite(game.id);
               }}
-              className={`p-2.5 bg-black/60 backdrop-blur-md rounded-full transition-colors border border-white/10 ${isFavorite ? 'bg-[#38BDF8] text-black border-[#38BDF8]' : 'text-white hover:bg-[#38BDF8] hover:text-black'}`}
+              className={`p-2.5 bg-black/60 backdrop-blur-md rounded-full transition-all hover:scale-110 active:scale-95 border border-white/10 ${isFavorite ? 'bg-[#38BDF8] text-black border-[#38BDF8]' : 'text-white hover:bg-[#38BDF8] hover:text-black'}`}
             >
                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
             </button>
@@ -99,7 +116,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
              }}
              className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
           >
-             <div className="w-14 h-14 rounded-full bg-[#38BDF8]/90 flex items-center justify-center backdrop-blur-md hover:scale-110 transition-transform shadow-[0_0_20px_#38BDF8]">
+             <div className="w-14 h-14 rounded-full bg-[#38BDF8]/90 flex items-center justify-center backdrop-blur-md group-hover:scale-110 active:scale-95 transition-all shadow-[0_0_20px_#38BDF8] hover:shadow-[0_0_30px_#38BDF8]">
                 <Play className="w-6 h-6 text-black ml-1 fill-black" />
              </div>
           </button>
@@ -108,7 +125,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
         {/* Content */}
         <div className="p-6 flex flex-col flex-grow relative z-10">
           <div className="flex justify-between items-center mb-3">
-            <span className="text-[10px] font-bold text-[#38BDF8] uppercase tracking-wider border border-[#38BDF8]/20 px-3 py-1 rounded-full bg-[#38BDF8]/5 font-display">
+            <span className="text-[10px] font-bold text-[#38BDF8] uppercase tracking-wider border border-[#38BDF8]/20 px-3 py-1 rounded-full bg-[#38BDF8]/5 font-display group-hover:bg-[#38BDF8]/10 transition-colors">
               {game.genre}
             </span>
             
@@ -155,11 +172,11 @@ const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite,
                     e.stopPropagation();
                     onStudioClick?.(game.studio);
                 }}
-                className="text-xs text-slate-400 hover:text-white transition-colors text-left truncate w-full flex items-center gap-2 font-display tracking-wide font-medium"
+                className="text-xs text-slate-400 hover:text-white transition-colors text-left truncate w-full flex items-center gap-2 font-display tracking-wide font-medium group/studio"
                 title={`Developer: ${game.studio}`}
              >
-                <Code2 className="w-3.5 h-3.5 text-slate-600" /> 
-                <span className="truncate">{game.studio}</span>
+                <Code2 className="w-3.5 h-3.5 text-slate-600 group-hover/studio:text-[#38BDF8] transition-colors" /> 
+                <span className="truncate group-hover/studio:underline decoration-[#38BDF8]/50 underline-offset-2">{game.studio}</span>
              </button>
              
              {game.publisher && (

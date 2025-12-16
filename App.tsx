@@ -280,13 +280,18 @@ const App: React.FC = () => {
         setView(id);
         setMobileMenuOpen(false);
       }}
-      className={`relative px-5 py-2.5 transition-all duration-300 font-bold text-sm flex items-center gap-2 tracking-normal font-display rounded-full
+      className={`relative px-5 py-2.5 transition-all duration-300 font-bold text-sm flex items-center gap-2 tracking-normal font-display rounded-full overflow-hidden group
         ${view === id 
-          ? 'text-black bg-white shadow-lg' 
-          : 'text-slate-400 hover:text-white hover:bg-white/10'
+          ? 'text-black bg-white shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105' 
+          : 'text-slate-400 hover:text-white'
         }`}
     >
-      {Icon && <Icon className="w-4 h-4" />}
+      {/* Micro-interaction: Background Fill on Hover */}
+      {view !== id && (
+        <span className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out rounded-full"></span>
+      )}
+      
+      {Icon && <Icon className="w-4 h-4 relative z-10 group-hover:scale-110 transition-transform duration-300" />}
       <span className="relative z-10">{label}</span>
     </button>
   );
@@ -303,7 +308,7 @@ const App: React.FC = () => {
                 <div className="flex items-center gap-3 cursor-pointer group select-none pl-2" onClick={() => setView('home')}>
                    <div className="relative">
                       {/* X-Dot-X Logo */}
-                      <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
+                      <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto group-hover:scale-110 transition-transform duration-300">
                         <path d="M8 8L20 24M20 8L8 24" stroke="#38BDF8" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="24" cy="16" r="3.5" fill="white"/>
                         <path d="M28 8L40 24M40 8L28 24" stroke="#38BDF8" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -328,17 +333,17 @@ const App: React.FC = () => {
                 <div className="hidden md:flex items-center gap-4 pr-2">
                    <button 
                     onClick={() => setView('directory')}
-                    className="p-3 text-white hover:bg-white/10 transition-colors border border-white/10 hover:border-white rounded-full"
+                    className="p-3 text-white hover:bg-white/10 transition-colors border border-white/10 hover:border-white rounded-full hover:rotate-12 active:scale-95 duration-200"
                    >
                      <Search className="w-5 h-5" />
                    </button>
                    <button 
                      onClick={() => setView('favorites')}
-                     className="p-3 text-[#38BDF8] hover:bg-[#38BDF8]/10 transition-colors border border-[#38BDF8]/30 hover:border-[#38BDF8] rounded-full group relative"
+                     className="p-3 text-[#38BDF8] hover:bg-[#38BDF8]/10 transition-colors border border-[#38BDF8]/30 hover:border-[#38BDF8] rounded-full group relative active:scale-95 duration-200"
                    >
-                     <Heart className="w-5 h-5 group-hover:fill-[#38BDF8]/50" />
+                     <Heart className="w-5 h-5 group-hover:fill-[#38BDF8]/50 transition-colors" />
                      {favorites.length > 0 && (
-                        <span className="absolute top-1 right-1 w-2 h-2 bg-[#38BDF8] rounded-full shadow-[0_0_10px_#38BDF8]"></span>
+                        <span className="absolute top-1 right-1 w-2 h-2 bg-[#38BDF8] rounded-full shadow-[0_0_10px_#38BDF8] animate-pulse"></span>
                      )}
                    </button>
                    <Button variant="secondary" size="sm" className="shadow-none rounded-full">SIGN IN</Button>
@@ -348,7 +353,7 @@ const App: React.FC = () => {
                 <div className="xl:hidden">
                   <button 
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-                    className="text-white p-2 hover:bg-white/10 border border-white/30 transition-colors rounded-full"
+                    className="text-white p-2 hover:bg-white/10 border border-white/30 transition-colors rounded-full active:scale-95"
                   >
                     {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                   </button>
@@ -371,7 +376,7 @@ const App: React.FC = () => {
                 <div className="pt-6 border-t border-white/10 grid grid-cols-2 gap-4">
                    <button 
                      onClick={() => {setView('directory'); setMobileMenuOpen(false);}}
-                     className="flex items-center justify-center gap-2 p-3 bg-white/5 border border-white/10 text-white font-bold font-display uppercase tracking-wider rounded-xl"
+                     className="flex items-center justify-center gap-2 p-3 bg-white/5 border border-white/10 text-white font-bold font-display uppercase tracking-wider rounded-xl active:scale-95 transition-transform"
                    >
                      <Search className="w-4 h-4" /> Search
                    </button>
@@ -397,31 +402,71 @@ const App: React.FC = () => {
 
         {/* HOME VIEW */}
         {view === 'home' && !loadingGames && (
-          <div className="space-y-20 animate-in fade-in duration-700">
+          <div className="space-y-20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
              
-             {/* Top Gamers - Moved to Top */}
-             <section className="relative pt-2">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-white/5 pb-4">
-                  <div>
-                      <h2 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tight">Elite <span className="text-[#38BDF8]">Operatives</span></h2>
-                      <p className="text-slate-500 text-xs font-mono tracking-widest">TOP RANKED PLAYERS // REGION: MENA</p>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => setShowFeaturedModal(true)}>
-                    Apply For Status
-                  </Button>
-                </div>
+             {/* Top Gamers - Enhanced with Amazing Background */}
+             <section className="relative py-8 md:py-12 md:px-8 -mx-4 md:mx-0 rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#050510] shadow-2xl group">
                 
-                {loadingGamers ? (
-                  <div className="text-slate-500 text-sm font-mono">LOADING_PROFILE_DATA...</div>
-                ) : (
-                  <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x perspective-1000">
-                    {topGamers.map(gamer => (
-                      <div key={gamer.id} className="snap-start">
-                         <GamerProfileCard gamer={gamer} />
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {/* Dynamic Background Layers */}
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    {/* Base Dark Mesh */}
+                    <div className="absolute inset-0 bg-[#050510]"></div>
+                    
+                    {/* Animated Grid / Cyber Texture */}
+                    <div className="absolute inset-0 opacity-[0.07]" 
+                         style={{ 
+                             backgroundImage: `linear-gradient(#38BDF8 1px, transparent 1px), linear-gradient(90deg, #38BDF8 1px, transparent 1px)`, 
+                             backgroundSize: '40px 40px' 
+                         }}>
+                    </div>
+                    
+                    {/* World Map / Data Viz Hint (Abstract SVG) */}
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-1/2 h-full opacity-10 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] bg-no-repeat bg-contain bg-right-center mix-blend-overlay filter blur-[1px]"></div>
+
+                    {/* Ambient Glows */}
+                    <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#38BDF8]/10 blur-[120px] rounded-full mix-blend-screen animate-pulse"></div>
+                    <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-500/5 blur-[100px] rounded-full mix-blend-screen"></div>
+
+                    {/* Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-[#050510]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#050510] via-transparent to-[#050510]"></div>
+                </div>
+
+                {/* Content Container */}
+                <div className="relative z-10 px-4 md:px-0">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 border-b border-white/10 pb-6">
+                        <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#38BDF8]/10 border border-[#38BDF8]/20 flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.15)] group-hover:shadow-[0_0_30px_rgba(56,189,248,0.25)] transition-shadow">
+                                <Hexagon className="w-8 h-8 text-[#38BDF8]" />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl md:text-4xl font-display font-black text-white mb-1 uppercase tracking-tight leading-none">
+                                    ELITE <span className="text-[#38BDF8]">OPERATIVES</span>
+                                </h2>
+                                <p className="text-slate-400 text-xs font-mono tracking-[0.2em] flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-[#38BDF8] rounded-full animate-pulse"></span>
+                                    TOP RANKED PLAYERS // REGION: MENA
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <Button variant="outline" size="sm" onClick={() => setShowFeaturedModal(true)} className="backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#38BDF8]/50 rounded-full px-6">
+                            <span className="mr-2">Apply For Status</span>
+                        </Button>
+                    </div>
+                    
+                    {loadingGamers ? (
+                        <div className="text-[#38BDF8] text-sm font-mono animate-pulse py-10 text-center">ACCESSING_DATABASE_RECORDS...</div>
+                    ) : (
+                        <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x perspective-1000 -mx-4 px-4 md:mx-0 md:px-0">
+                            {topGamers.map(gamer => (
+                                <div key={gamer.id} className="snap-start transform transition-transform duration-500 hover:scale-[1.02]">
+                                    <GamerProfileCard gamer={gamer} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
              </section>
 
             {/* Featured Hero */}
@@ -429,7 +474,7 @@ const App: React.FC = () => {
 
             {/* Game of the Week */}
             {games.length > 1 && (
-               <section className="relative overflow-hidden bg-[#121212] border border-white/5 group rounded-[2.5rem]">
+               <section className="relative overflow-hidden bg-[#121212] border border-white/5 group rounded-[2.5rem] hover:border-[#38BDF8]/20 transition-colors duration-500">
                   <div className="grid grid-cols-1 lg:grid-cols-2">
                      <div className="relative h-64 lg:h-auto min-h-[400px] overflow-hidden">
                         <img 
@@ -449,9 +494,9 @@ const App: React.FC = () => {
                         </div>
                      </div>
                      
-                     <div className="p-8 lg:p-16 flex flex-col justify-center relative z-20">
+                     <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center relative z-20">
                         {/* Decorative background number */}
-                        <div className="absolute top-4 right-4 text-[120px] font-black text-white/5 font-display leading-none select-none pointer-events-none">
+                        <div className="absolute top-4 right-4 text-[120px] font-black text-white/5 font-display leading-none select-none pointer-events-none group-hover:text-white/10 transition-colors duration-500">
                             01
                         </div>
                         
@@ -494,10 +539,10 @@ const App: React.FC = () => {
              {/* News & Events Grid */}
              <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                 {/* News */}
-                <div className="bg-[#121212] border border-white/5 p-10 rounded-[2.5rem] relative overflow-hidden">
+                <div className="bg-[#121212] border border-white/5 p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-colors">
                    <div className="flex items-center justify-between mb-10">
                       <div className="flex items-center gap-4">
-                         <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white">
+                         <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                            <Zap className="w-6 h-6 fill-current" />
                          </div>
                          <div>
@@ -509,12 +554,12 @@ const App: React.FC = () => {
                    </div>
                    <div className="space-y-6">
                       {loadingNews ? <p className="text-white font-mono animate-pulse">DECRYPTING_SIGNAL...</p> : news.slice(0, 3).map(item => (
-                        <div key={item.id} className="group cursor-pointer flex gap-5 items-start hover:bg-white/5 p-3 rounded-2xl transition-colors border border-transparent hover:border-white/5" onClick={() => window.open(item.url || '#', '_blank')}>
+                        <div key={item.id} className="group/item cursor-pointer flex gap-5 items-start hover:bg-white/5 p-3 rounded-2xl transition-all border border-transparent hover:border-white/5 hover:translate-x-2" onClick={() => window.open(item.url || '#', '_blank')}>
                            <div className="w-24 h-20 bg-black overflow-hidden rounded-xl border border-white/5 flex-shrink-0 relative">
-                             <img src={item.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" alt="news" loading="lazy" decoding="async" />
+                             <img src={item.imageUrl} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500 opacity-80 group-hover/item:opacity-100" alt="news" loading="lazy" decoding="async" />
                            </div>
                            <div>
-                             <h4 className="text-white font-bold text-sm md:text-base leading-snug mb-2 group-hover:text-[#38BDF8] transition-colors line-clamp-2 uppercase font-display">{item.headline}</h4>
+                             <h4 className="text-white font-bold text-sm md:text-base leading-snug mb-2 group-hover/item:text-[#38BDF8] transition-colors line-clamp-2 uppercase font-display">{item.headline}</h4>
                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">{item.source} // {item.date}</span>
                            </div>
                         </div>
@@ -523,10 +568,10 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Events */}
-                <div className="bg-[#121212] border border-white/5 p-10 rounded-[2.5rem] relative overflow-hidden">
+                <div className="bg-[#121212] border border-white/5 p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-colors">
                    <div className="flex items-center justify-between mb-10">
                       <div className="flex items-center gap-4">
-                         <div className="w-12 h-12 bg-[#38BDF8]/10 border border-[#38BDF8]/20 rounded-full flex items-center justify-center text-[#38BDF8]">
+                         <div className="w-12 h-12 bg-[#38BDF8]/10 border border-[#38BDF8]/20 rounded-full flex items-center justify-center text-[#38BDF8] group-hover:scale-110 transition-transform duration-300">
                            <CalendarIcon className="w-6 h-6" />
                          </div>
                          <div>
@@ -538,7 +583,7 @@ const App: React.FC = () => {
                    </div>
                    <div className="space-y-4">
                      {loadingEvents ? <p className="text-[#38BDF8] font-mono animate-pulse">SYNCING_OPERATIONS...</p> : events.slice(0, 4).map((event, idx) => (
-                        <div key={event.id} className="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-2xl hover:bg-[#38BDF8]/5 transition-colors border border-white/5 hover:border-[#38BDF8]/20">
+                        <div key={event.id} className="flex items-center justify-between p-4 bg-[#0a0a0a] rounded-2xl hover:bg-[#38BDF8]/5 transition-all border border-white/5 hover:border-[#38BDF8]/20 hover:scale-[1.02]">
                            <div className="flex items-center gap-4">
                              <div className="text-center bg-[#38BDF8]/10 p-2 min-w-[4rem] rounded-xl border border-[#38BDF8]/20">
                                 <span className="block text-[10px] font-bold text-[#38BDF8] uppercase font-mono">{event.date.split(' ')[0]}</span>
@@ -573,7 +618,7 @@ const App: React.FC = () => {
         {/* DIRECTORY VIEW */}
         {view === 'directory' && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-500">
-             <div className="bg-[#121212] border border-white/5 p-12 rounded-[2.5rem] relative overflow-hidden">
+             <div className="bg-[#121212] border border-white/5 p-6 md:p-10 rounded-[2.5rem] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-10 opacity-5">
                     <Gamepad2 className="w-96 h-96 text-white" />
                 </div>
@@ -591,7 +636,7 @@ const App: React.FC = () => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="SEARCH_DATABASE..." 
-                            className="w-full bg-[#0a0a0a] border border-white/10 pl-6 pr-12 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#38BDF8] transition-all font-mono text-sm rounded-full"
+                            className="w-full bg-[#0a0a0a] border border-white/10 pl-6 pr-12 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#38BDF8] transition-all font-mono text-sm rounded-full focus:shadow-[0_0_20px_rgba(56,189,248,0.2)]"
                           />
                           <Search className="absolute right-6 top-4 w-5 h-5 text-white/40 pointer-events-none group-focus-within:text-[#38BDF8]" />
                       </div>
@@ -605,9 +650,9 @@ const App: React.FC = () => {
                          <button
                            key={genre}
                            onClick={() => setSelectedGenre(genre)}
-                           className={`px-6 py-2 text-xs font-bold uppercase tracking-wider transition-all border font-mono rounded-full ${
+                           className={`px-6 py-2 text-xs font-bold uppercase tracking-wider transition-all border font-mono rounded-full active:scale-95 ${
                               selectedGenre === genre 
-                                ? 'bg-white text-black border-white shadow-lg' 
+                                ? 'bg-white text-black border-white shadow-lg scale-105' 
                                 : 'bg-transparent text-white/60 border-white/10 hover:border-white hover:text-white'
                            }`}
                          >
@@ -707,7 +752,7 @@ const App: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                  {loadingNews ? <div className="text-white col-span-full text-center py-20 font-mono animate-pulse">DOWNLOADING...</div> : news.map(item => (
-                    <div key={item.id} className="group flex flex-col h-full bg-[#121212] border border-white/5 overflow-hidden hover:border-white/20 transition-colors relative rounded-[2rem]">
+                    <div key={item.id} className="group flex flex-col h-full bg-[#121212] border border-white/5 overflow-hidden hover:border-white/20 transition-all hover:-translate-y-1 relative rounded-[2rem]">
                        <div className="h-48 overflow-hidden bg-black relative">
                           <img src={item.imageUrl} alt={item.headline} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100" loading="lazy" decoding="async" />
                           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
@@ -743,7 +788,7 @@ const App: React.FC = () => {
                </div>
                <div className="space-y-4">
                   {loadingEvents ? <div className="text-[#38BDF8] col-span-full text-center py-20 font-mono animate-pulse">SYNCING...</div> : events.map(event => (
-                     <div key={event.id} className="group grid grid-cols-12 gap-6 p-6 bg-[#121212] hover:bg-[#38BDF8]/5 border border-[#38BDF8]/20 transition-all hover:border-[#38BDF8] relative overflow-hidden rounded-[2rem]">
+                     <div key={event.id} className="group grid grid-cols-12 gap-6 p-6 bg-[#121212] hover:bg-[#38BDF8]/5 border border-[#38BDF8]/20 transition-all hover:border-[#38BDF8] hover:scale-[1.01] relative overflow-hidden rounded-[2rem]">
                         
                         <div className="col-span-12 md:col-span-2 flex flex-col justify-center text-center md:text-left border-r border-[#38BDF8]/10">
                            <span className="text-xs font-bold text-[#38BDF8] uppercase tracking-widest mb-1 font-mono">{event.date.split(' ')[0]}</span>
