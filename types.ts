@@ -1,8 +1,10 @@
+
 export interface Game {
   id: string;
   title: string;
   genre: string;
   studio: string;
+  publisher?: string;
   platform: string[];
   description: string;
   rating: number;
@@ -71,7 +73,24 @@ export interface MerchItem {
   store: string;
 }
 
-export type ViewState = 'home' | 'directory' | 'news' | 'events' | 'reviews' | 'favorites' | 'shop';
+export interface ShortVideo {
+  id: string;
+  url: string;
+  title: string;
+  description?: string;
+  creator: string;
+  creatorAvatar?: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  gameTag: string;
+  isUserUploaded?: boolean;
+  thumbnailUrl?: string;
+  views?: string;
+  uploadDate?: string;
+}
+
+export type ViewState = 'home' | 'directory' | 'news' | 'events' | 'calendar' | 'reviews' | 'favorites' | 'shop' | 'shorts';
 
 export interface ChatMessage {
   id: string;

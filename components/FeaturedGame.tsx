@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Game } from '../types';
-import { Play, Info, Star } from 'lucide-react';
+import { Play, Info, Aperture } from 'lucide-react';
 import Button from './Button';
 
 interface FeaturedGameProps {
@@ -8,64 +8,67 @@ interface FeaturedGameProps {
 }
 
 const FeaturedGame: React.FC<FeaturedGameProps> = ({ game }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   if (!game) return null;
 
   return (
-    <section className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl shadow-cyan-900/20 group">
+    <section className="relative w-full h-[550px] md:h-[650px] lg:h-[750px] overflow-hidden group rounded-[2.5rem] bg-black/40 border border-white/5 shadow-2xl">
+      
       {/* Background Image */}
-      <div className="absolute inset-0">
-        <img 
-          src={game.imageUrl} 
-          alt={game.title} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050b14] via-[#050b14]/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050b14] via-[#050b14]/60 to-transparent" />
+      <div className="absolute inset-0 bg-[#050510]">
+         <img 
+            src={game.imageUrl} 
+            alt={game.title} 
+            onLoad={() => setIsImageLoaded(true)}
+            className={`w-full h-full object-cover transition-all duration-[20s] group-hover:scale-105
+                ${isImageLoaded ? 'opacity-70' : 'opacity-0'}
+            `}
+            // Priority loading for LCP
+            fetchPriority="high"
+          />
+          {/* Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/90 via-[#050505]/30 to-transparent" />
+          
+          {/* Grid Overlay - Subtler */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none"></div>
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-end p-8 md:p-12 max-w-3xl">
-        <div className="space-y-4 animate-in fade-in slide-in-from-left-8 duration-700">
-          <div className="flex gap-2">
-            {game.isNewRelease && (
-               <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-lg shadow-pink-500/50">
-                 NEW RELEASE
-               </span>
-            )}
-            <span className="bg-blue-600/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-md border border-white/10">
-              {game.genre}
-            </span>
-          </div>
+      <div className="relative h-full flex flex-col justify-center p-8 md:p-16 lg:p-24 max-w-6xl z-10 items-start text-left">
           
-          <h1 className="text-4xl md:text-6xl font-display font-black text-white leading-tight drop-shadow-md">
-            {game.title}
+          <div className="flex items-center gap-3 mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+             <div className="flex items-center gap-2 px-4 py-1.5 bg-white text-black text-xs font-bold uppercase tracking-wider font-display rounded-full">
+                <Aperture className="w-3.5 h-3.5 animate-spin-slow" />
+                {game.isNewRelease ? 'New Release' : 'Featured'}
+             </div>
+             <span className="text-white/90 font-bold uppercase tracking-widest text-xs border border-white/20 bg-black/30 backdrop-blur-md px-4 py-1.5 rounded-full font-display">
+                {game.genre}
+             </span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white leading-[0.9] tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 drop-shadow-xl uppercase">
+             {game.title}
           </h1>
 
-          <div className="flex items-center gap-2 text-yellow-400">
-             <div className="flex">
-               {[...Array(5)].map((_, i) => (
-                 <Star key={i} className={`w-5 h-5 ${i < Math.floor(game.rating) ? 'fill-current' : 'text-slate-600'}`} />
-               ))}
-             </div>
-             <span className="font-bold text-white ml-2">{game.rating} Rating</span>
+          <div className="flex items-start gap-4 mb-10 max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+             <div className="w-1 bg-[#38BDF8] self-stretch rounded-full opacity-80"></div>
+             <p className="text-slate-200 text-lg md:text-xl leading-relaxed line-clamp-3 font-sans font-medium drop-shadow-md">
+                {game.description}
+             </p>
           </div>
 
-          <p className="text-slate-300 text-lg md:text-xl line-clamp-3 max-w-2xl drop-shadow-sm">
-            {game.description}
-          </p>
-
-          <div className="flex flex-wrap gap-4 pt-4">
-             <a href={game.officialLink || '#'} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gap-2 shadow-cyan-500/25">
-                  <Play className="w-5 h-5 fill-current" /> Play Now
+          <div className="flex flex-wrap gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400">
+             <a href={game.officialLink || '#'} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                <Button size="lg" variant="primary" className="w-full sm:w-auto justify-center min-w-[160px] font-display text-lg rounded-full">
+                   <Play className="w-5 h-5 mr-2 fill-current" /> Play Now
                 </Button>
              </a>
-             <Button variant="outline" size="lg" className="gap-2 bg-black/30 backdrop-blur-md border-white/20 hover:bg-white/10 hover:border-white/40">
-                <Info className="w-5 h-5" /> More Info
+             <Button variant="glass" size="lg" className="w-full sm:w-auto justify-center min-w-[160px] font-display text-lg rounded-full">
+                <Info className="w-5 h-5 mr-2" /> More Details
              </Button>
           </div>
-        </div>
       </div>
     </section>
   );

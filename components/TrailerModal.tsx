@@ -38,9 +38,9 @@ const TrailerModal: React.FC<TrailerModalProps> = ({ isOpen, onClose, gameTitle,
       {/* Click outside to close */}
       <div className="absolute inset-0 z-10" onClick={onClose}></div>
 
-      <div className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl shadow-cyan-900/20 border border-slate-800 z-20">
+      <div className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl shadow-white/10 border border-slate-800 z-20">
          <div className="absolute inset-0 flex items-center justify-center -z-10">
-            <Loader2 className="w-10 h-10 text-cyan-500 animate-spin" />
+            <Loader2 className="w-10 h-10 text-white animate-spin" />
          </div>
          <iframe
            className="w-full h-full"
