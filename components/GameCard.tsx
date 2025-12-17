@@ -1,200 +1,82 @@
+
 import React, { useState } from 'react';
 import { Game } from '../types';
-import { Star, Share2, Check, Heart, Play, Code2, Building2, Trophy } from 'lucide-react';
+import { Star, Heart, Play, ExternalLink } from 'lucide-react';
 import TrailerModal from './TrailerModal';
+import Button from './Button';
 
 interface GameCardProps {
   game: Game;
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
-  onStudioClick?: (studio: string) => void;
 }
 
-const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite, onStudioClick }) => {
+const GameCard: React.FC<GameCardProps> = ({ game, isFavorite, onToggleFavorite }) => {
   const [showTrailer, setShowTrailer] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  
-  // Rating state
-  const [isRatingMode, setIsRatingMode] = useState(false);
-  const [userRating, setUserRating] = useState<number | null>(null);
-  const [hoverRating, setHoverRating] = useState<number | null>(null);
-
-  const handleShare = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const shareData = {
-        title: game.title,
-        text: `Check out ${game.title} on unrealgames.cloud!`,
-        url: game.officialLink || window.location.href
-    };
-    if (navigator.share) {
-        try { await navigator.share(shareData); } catch (err) { console.log('Error sharing:', err); }
-    } else {
-        try {
-            await navigator.clipboard.writeText(`${shareData.title}\n${shareData.url}`);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch (err) { console.error('Failed to copy', err); }
-    }
-  };
-
-  const handleRating = (e: React.MouseEvent, rating: number) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setUserRating(rating);
-  };
 
   return (
     <>
-      <div 
-        className="group relative flex flex-col h-full bg-[#121212] rounded-[2rem] overflow-hidden hover:shadow-[0_0_40px_rgba(56,189,248,0.15)] transition-all duration-500 cursor-pointer border border-white/5 hover:border-[#38BDF8]/40 hover:-translate-y-2 transform perspective-1000"
-        onClick={() => game.officialLink && window.open(game.officialLink, '_blank')}
-      >
-        {/* Image Container */}
-        <div className="relative aspect-video overflow-hidden bg-[#0a0a0a]">
-          {/* Skeleton Loader */}
-          {!isImageLoaded && (
-            <div className="absolute inset-0 bg-white/5 animate-pulse flex items-center justify-center z-0">
-               <div className="w-8 h-8 border-2 border-[#38BDF8]/30 border-t-[#38BDF8] rounded-full animate-spin"></div>
-            </div>
-          )}
-          
+      <div className="group relative flex flex-col h-[440px] bg-[#08080c] rounded-[1.5rem] overflow-hidden border border-white/5 transition-all duration-500 hover:border-white/20 hover:bg-[#0a0a14]">
+        <div className="relative h-[220px] w-full overflow-hidden bg-black">
           <img 
             src={game.imageUrl} 
             alt={game.title} 
             onLoad={() => setIsImageLoaded(true)}
-            className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 relative z-10
-              ${isImageLoaded ? 'opacity-90 group-hover:opacity-100' : 'opacity-0'}
-            `}
-            loading="lazy"
-            decoding="async"
+            className={`w-full h-full object-cover transition-all duration-700 opacity-60 group-hover:opacity-80 group-hover:scale-105 ${isImageLoaded ? '' : 'hidden'}`}
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08080c] via-transparent to-transparent"></div>
           
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-60" />
-          
-          {/* Micro-interaction: Sheen Effect */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out z-20 pointer-events-none" />
-          
-          {/* Achievement Tooltip */}
-          <div className="absolute top-4 left-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 delay-100">
-             <div className="group/tooltip relative">
-                <div className="p-2.5 bg-black/60 backdrop-blur-md text-[#FFD700] rounded-full border border-white/10 shadow-lg hover:bg-black/80 transition-colors">
-                    <Trophy className="w-4 h-4" />
-                </div>
-                <div className="absolute left-0 top-full mt-2 px-3 py-1.5 bg-black/90 border border-white/10 rounded-xl text-[10px] font-bold text-white whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-all pointer-events-none shadow-xl transform origin-top-left scale-95 group-hover/tooltip:scale-100 z-50">
-                    <div className="flex items-center gap-2">
-                         <span className="text-[#FFD700]">Achievements unlocked</span>
-                    </div>
-                </div>
-             </div>
-          </div>
-
-          <div className="absolute top-4 right-4 flex gap-2 translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 z-30 delay-75">
-             <button
-              onClick={handleShare}
-              className="p-2.5 bg-black/60 backdrop-blur-md text-white rounded-full hover:bg-[#38BDF8] hover:text-black transition-all hover:scale-110 active:scale-95 border border-white/10"
-            >
-              {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-            </button>
+          <div className="absolute top-3 right-3 z-20">
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onToggleFavorite(game.id);
-              }}
-              className={`p-2.5 bg-black/60 backdrop-blur-md rounded-full transition-all hover:scale-110 active:scale-95 border border-white/10 ${isFavorite ? 'bg-[#38BDF8] text-black border-[#38BDF8]' : 'text-white hover:bg-[#38BDF8] hover:text-black'}`}
+              onClick={(e) => { e.stopPropagation(); onToggleFavorite(game.id); }}
+              className={`p-2.5 rounded-full backdrop-blur-md transition-all border border-white/5 hover:bg-white/10 ${isFavorite ? 'text-[#70CFFF] bg-white/5' : 'text-slate-500 hover:text-white'}`}
             >
-               <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+               <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
             </button>
           </div>
 
           <button 
-             onClick={(e) => {
-                 e.stopPropagation();
-                 setShowTrailer(true);
-             }}
-             className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
+             onClick={(e) => { e.stopPropagation(); setShowTrailer(true); }}
+             className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
           >
-             <div className="w-14 h-14 rounded-full bg-[#38BDF8]/90 flex items-center justify-center backdrop-blur-md group-hover:scale-110 active:scale-95 transition-all shadow-[0_0_20px_#38BDF8] hover:shadow-[0_0_30px_#38BDF8]">
-                <Play className="w-6 h-6 text-black ml-1 fill-black" />
+             <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-500">
+                <Play className="w-5 h-5 fill-current ml-0.5" />
              </div>
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 flex flex-col flex-grow relative z-10">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-[10px] font-bold text-[#38BDF8] uppercase tracking-wider border border-[#38BDF8]/20 px-3 py-1 rounded-full bg-[#38BDF8]/5 font-display group-hover:bg-[#38BDF8]/10 transition-colors">
-              {game.genre}
-            </span>
-            
-            {/* Interactive Rating */}
-            <div 
-                className="relative z-20 flex items-center" 
-                onMouseEnter={() => setIsRatingMode(true)}
-                onMouseLeave={() => {
-                    setIsRatingMode(false);
-                    setHoverRating(null);
-                }}
-            >
-                {/* Collapsed View (Score) */}
-                <div className={`flex items-center gap-1.5 transition-all duration-200 ${isRatingMode ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'}`}>
-                     <Star className={`w-3.5 h-3.5 ${userRating ? 'fill-[#38BDF8] text-[#38BDF8]' : 'fill-current text-[#38BDF8]'}`} />
-                     <span className="text-sm font-bold font-display text-white">{userRating || game.rating}</span>
-                </div>
+        <div className="p-6 flex flex-col flex-grow">
+           <div className="flex justify-between items-center mb-3">
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 font-mono">
+                {game.genre}
+              </span>
+              <div className="flex items-center gap-1.5">
+                <Star className="w-3 h-3 text-[#70CFFF] fill-current" />
+                <span className="text-[10px] font-bold text-white font-mono">{game.rating}</span>
+              </div>
+           </div>
 
-                {/* Expanded View (Stars) */}
-                <div className={`absolute right-0 flex items-center gap-1 bg-[#1a1a1a] rounded-full px-3 py-1.5 border border-white/10 shadow-xl transition-all duration-200 origin-right ${isRatingMode ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-90 translate-x-4 pointer-events-none'}`}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                            key={star}
-                            onMouseEnter={() => setHoverRating(star)}
-                            onClick={(e) => handleRating(e, star)}
-                            className="focus:outline-none transition-transform hover:scale-125 p-0.5"
-                        >
-                            <Star 
-                                className={`w-3.5 h-3.5 ${star <= (hoverRating || userRating || 0) ? 'fill-[#38BDF8] text-[#38BDF8]' : 'text-slate-600'}`} 
-                            />
-                        </button>
-                    ))}
-                </div>
-            </div>
-          </div>
-          
-          <h3 className="text-xl font-display font-bold text-white leading-tight mb-2 group-hover:text-[#38BDF8] transition-colors truncate uppercase tracking-tight">
-            {game.title}
-          </h3>
-          
-          <div className="mt-auto flex flex-col gap-1 w-full border-t border-white/5 pt-4">
-             <button 
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onStudioClick?.(game.studio);
-                }}
-                className="text-xs text-slate-400 hover:text-white transition-colors text-left truncate w-full flex items-center gap-2 font-display tracking-wide font-medium group/studio"
-                title={`Developer: ${game.studio}`}
-             >
-                <Code2 className="w-3.5 h-3.5 text-slate-600 group-hover/studio:text-[#38BDF8] transition-colors" /> 
-                <span className="truncate group-hover/studio:underline decoration-[#38BDF8]/50 underline-offset-2">{game.studio}</span>
-             </button>
-             
-             {game.publisher && (
-                <div className="text-[10px] text-slate-500 flex items-center gap-2 truncate font-display tracking-wide font-medium" title={`Publisher: ${game.publisher}`}>
-                    <Building2 className="w-3.5 h-3.5 text-slate-600" />
-                    <span className="truncate">{game.publisher}</span>
-                </div>
-             )}
-          </div>
+           <h3 className="text-lg font-display font-bold text-white mb-2 leading-tight group-hover:text-white transition-colors line-clamp-2">
+             {game.title}
+           </h3>
+           
+           <p className="text-slate-600 text-[10px] font-mono uppercase tracking-widest mb-6 truncate">{game.studio}</p>
+
+           <div className="mt-auto">
+              <Button 
+                variant="outline" 
+                className="w-full h-10 gap-2 rounded-xl text-[9px] border-white/5 hover:bg-white hover:text-black hover:border-white"
+                onClick={(e) => { e.stopPropagation(); game.officialLink && window.open(game.officialLink, '_blank'); }}
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Initialize
+              </Button>
+           </div>
         </div>
       </div>
 
-      <TrailerModal 
-        isOpen={showTrailer} 
-        onClose={() => setShowTrailer(false)} 
-        gameTitle={game.title} 
-        trailerVideoId={game.trailerVideoId}
-      />
+      <TrailerModal isOpen={showTrailer} onClose={() => setShowTrailer(false)} gameTitle={game.title} trailerVideoId={game.trailerVideoId} />
     </>
   );
 };

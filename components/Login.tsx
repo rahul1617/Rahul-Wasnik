@@ -68,19 +68,19 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-[#050505] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.05)_0%,transparent_70%)]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#38BDF8]/5 blur-[120px] rounded-full animate-pulse"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(112,207,255,0.05)_0%,transparent_70%)]"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#70CFFF]/5 blur-[120px] rounded-full animate-pulse"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md animate-in fade-in zoom-in duration-500">
         <div className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group">
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-6 group-hover:border-[#38BDF8]/50 transition-colors duration-500">
-              <Activity className="w-8 h-8 text-[#38BDF8]" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-6 group-hover:border-[#70CFFF]/50 transition-colors duration-500">
+              <Activity className="w-8 h-8 text-[#70CFFF]" />
             </div>
             <h1 className="text-3xl font-display font-black text-white tracking-tighter uppercase mb-2">
-              UNREAL<span className="text-[#38BDF8]">.CLOUD</span>
+              UNREALGAME<span className="text-[#70CFFF]">.CLOUD</span>
             </h1>
             <p className="text-slate-500 font-mono text-[10px] tracking-[0.3em] uppercase">Security Clearance Required</p>
           </div>
@@ -88,7 +88,7 @@ const Login: React.FC = () => {
           <form onSubmit={handleLogin} className="space-y-5">
             <div className="space-y-4">
               <div className="relative group">
-                <div className="absolute left-4 top-4 text-slate-500 group-focus-within:text-[#38BDF8] transition-colors">
+                <div className="absolute left-4 top-4 text-slate-500 group-focus-within:text-[#70CFFF] transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
                 <input 
@@ -96,13 +96,13 @@ const Login: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="IDENTITY_EMAIL"
-                  className="w-full bg-black border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8]/20 transition-all font-mono text-sm"
+                  className="w-full bg-black border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#70CFFF] focus:ring-1 focus:ring-[#70CFFF]/20 transition-all font-mono text-sm"
                   required
                 />
               </div>
 
               <div className="relative group">
-                <div className="absolute left-4 top-4 text-slate-500 group-focus-within:text-[#38BDF8] transition-colors">
+                <div className="absolute left-4 top-4 text-slate-500 group-focus-within:text-[#70CFFF] transition-colors">
                   <Lock className="w-5 h-5" />
                 </div>
                 <input 
@@ -110,17 +110,17 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="SECURITY_PASSWORD"
-                  className="w-full bg-black border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8]/20 transition-all font-mono text-sm"
+                  className="w-full bg-black border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-slate-600 focus:outline-none focus:border-[#70CFFF] focus:ring-1 focus:ring-[#70CFFF]/20 transition-all font-mono text-sm"
                   required
                 />
               </div>
             </div>
 
             {error && (
-              <div className={`rounded-xl p-4 flex flex-col gap-2 animate-in slide-in-from-top-2 border ${error.code === 'CONFIG_REQUIRED' ? 'bg-[#38BDF8]/5 border-[#38BDF8]/20' : 'bg-red-500/10 border-red-500/20'}`}>
+              <div className={`rounded-xl p-4 flex flex-col gap-2 animate-in slide-in-from-top-2 border ${error.code === 'CONFIG_REQUIRED' ? 'bg-[#70CFFF]/5 border-[#70CFFF]/20' : 'bg-red-500/10 border-red-500/20'}`}>
                 <div className="flex items-center gap-3">
-                  <AlertCircle className={`w-4 h-4 ${error.code === 'CONFIG_REQUIRED' ? 'text-[#38BDF8]' : 'text-red-500'}`} />
-                  <p className={`text-[10px] font-mono font-black uppercase tracking-widest ${error.code === 'CONFIG_REQUIRED' ? 'text-[#38BDF8]' : 'text-red-400'}`}>
+                  <AlertCircle className={`w-4 h-4 ${error.code === 'CONFIG_REQUIRED' ? 'text-[#70CFFF]' : 'text-red-500'}`} />
+                  <p className={`text-[10px] font-mono font-black uppercase tracking-widest ${error.code === 'CONFIG_REQUIRED' ? 'text-[#70CFFF]' : 'text-red-400'}`}>
                     {error.code}
                   </p>
                 </div>
@@ -130,7 +130,7 @@ const Login: React.FC = () => {
                     href="https://console.firebase.google.com/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-[10px] text-[#38BDF8] font-bold hover:underline mt-1"
+                    className="flex items-center gap-1 text-[10px] text-[#70CFFF] font-bold hover:underline mt-1"
                   >
                     Open Firebase Console <ExternalLink className="w-3 h-3" />
                   </a>
