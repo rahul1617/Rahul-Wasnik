@@ -2,8 +2,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Game, NewsArticle, GamingEvent, Review, GamerProfile, MerchItem } from "../types";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+// Fix: Use direct process.env.API_KEY in the constructor as per guidelines. 
+// Do not provide a fallback or separate constant.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const REAL_GAMES_DATA: Game[] = [
     // --- TOP HITS ---
@@ -562,12 +563,14 @@ export const fetchNewsWithSearch = async (): Promise<NewsArticle[]> => {
         }
       }
     });
+    // Extract search results and ensure we have image placeholders
     const parsed = JSON.parse(formattingResponse.text || '[]');
     return parsed.map((item: any) => ({
         ...item,
         imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(item.headline)}?width=500&height=250&nologo=true`
     }));
   } catch (error) {
+    console.error("Failed to fetch news:", error);
     return [];
   }
 };
@@ -597,6 +600,7 @@ export const fetchGamingEvents = async (): Promise<GamingEvent[]> => {
     });
     return JSON.parse(response.text || '[]');
   } catch (error) {
+    console.error("Failed to fetch events:", error);
     return [];
   }
 };
@@ -625,6 +629,7 @@ export const fetchGameReviews = async (): Promise<Review[]> => {
         });
         return JSON.parse(response.text || '[]');
     } catch (e) {
+        console.error("Failed to fetch reviews:", e);
         return [];
     }
 };

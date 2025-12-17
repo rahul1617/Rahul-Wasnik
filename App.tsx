@@ -2,9 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Game, NewsArticle, GamingEvent, ViewState, Review, GamerProfile, MerchItem, ShortVideo } from './types';
 import { fetchFeaturedGames, fetchNewsWithSearch, fetchGamingEvents, fetchGameReviews, fetchTopGamers, fetchMerchItems } from './services/geminiService';
-import { auth } from './services/firebase';
-import { onAuthStateChanged, User, signOut } from 'firebase/auth';
-import { Menu, X, Search, Heart, ShoppingBag, ArrowUpRight, Gamepad2, Zap, PlaySquare, Trophy, ChevronRight, Calendar as CalendarIcon, Hexagon, Activity, LogOut } from 'lucide-react';
+import { Menu, X, Search, Heart, ShoppingBag, ArrowUpRight, Gamepad2, Zap, PlaySquare, Trophy, ChevronRight, Calendar as CalendarIcon, Hexagon, Activity } from 'lucide-react';
 import GameCard from './components/GameCard';
 import GamerProfileCard from './components/GamerProfileCard';
 import TrendingGames from './components/TrendingGames';
@@ -17,11 +15,8 @@ import FeaturedGame from './components/FeaturedGame';
 import ShortsFeed from './components/ShortsFeed';
 import UploadShortModal from './components/UploadShortModal';
 import ReleaseCalendar from './components/ReleaseCalendar';
-import Login from './components/Login';
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
   const [view, setView] = useState<ViewState>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showFeaturedModal, setShowFeaturedModal] = useState(false);
@@ -54,16 +49,6 @@ const App: React.FC = () => {
   const [loadingMerch, setLoadingMerch] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setAuthLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!currentUser) return;
-    
     // Initial static favorites load
     try {
       const saved = localStorage.getItem('nexus_favorites');
@@ -89,20 +74,14 @@ const App: React.FC = () => {
     };
 
     initData();
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('nexus_favorites', JSON.stringify(favorites));
-    }
-  }, [favorites, currentUser]);
+    localStorage.setItem('nexus_favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
-  };
-
-  const handleLogout = () => {
-    signOut(auth);
   };
 
   const handleStudioClick = (studio: string) => {
@@ -126,25 +105,6 @@ const App: React.FC = () => {
       return 0;
     });
   }, [games, searchQuery, selectedGenre, selectedPlatform, sortBy]);
-
-  const favoriteGamesList = useMemo(() => {
-    return games.filter(game => favorites.includes(game.id));
-  }, [games, favorites]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
-        <div className="flex flex-col items-center">
-          <Activity className="w-12 h-12 text-[#38BDF8] animate-spin mb-4" />
-          <span className="text-white font-mono text-xs tracking-widest animate-pulse">AUTHORIZING_ACCESS...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!currentUser) {
-    return <Login />;
-  }
 
   const NavItem = ({ id, label, icon: Icon }: { id: ViewState; label: string; icon?: any }) => (
     <button
@@ -203,9 +163,6 @@ const App: React.FC = () => {
                         <span className="absolute top-1 right-1 w-2 h-2 bg-[#38BDF8] rounded-full animate-pulse"></span>
                      )}
                    </button>
-                   <button onClick={handleLogout} className="p-3 text-slate-500 hover:text-white transition-colors border border-white/5 hover:bg-white/5 rounded-full active:scale-95" title="Logout">
-                      <LogOut className="w-5 h-5" />
-                   </button>
                 </div>
 
                 <div className="xl:hidden">
@@ -239,7 +196,7 @@ const App: React.FC = () => {
                                 </h2>
                                 <p className="text-slate-400 text-xs font-mono tracking-[0.2em] flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-[#38BDF8] rounded-full animate-pulse"></span>
-                                    AUTHENTICATED USER: {currentUser?.email?.split('@')[0]}
+                                    GUEST_OPERATIVE_ACCESS
                                 </p>
                             </div>
                         </div>
