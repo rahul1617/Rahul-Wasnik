@@ -1,19 +1,20 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDfG0LiZtHrFUOnZQt2uytsHxpDkVAk4sI",
-  authDomain: "unreal-117f8.firebaseapp.com",
-  projectId: "unreal-117f8",
-  storageBucket: "unreal-117f8.firebasestorage.app",
-  messagingSenderId: "52924929980",
-  appId: "1:52924929980:web:2d4cb1f59aa348845e3db9",
-  measurementId: "G-15DRK8VB1Z"
+  apiKey: "AIzaSyDe4T0pyjQR_h_drevTZh_1sLxbycAyQUA",
+  authDomain: "unreal-2026.firebaseapp.com",
+  projectId: "unreal-2026",
+  storageBucket: "unreal-2026.firebasestorage.app",
+  messagingSenderId: "485958392372",
+  appId: "1:485958392372:web:208395b8b4b3e0d81b8861",
+  measurementId: "G-F3RW7TJEJ6"
 };
 
 const app = initializeApp(firebaseConfig);
-// Fix: Initialize and export auth and googleProvider to resolve module resolution errors in Login.tsx
 export const auth = getAuth(app);
+export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 export const googleProvider = new GoogleAuthProvider();
 export default app;
